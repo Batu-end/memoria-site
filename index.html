@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoria | Analyze Yourself</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600&family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="interactive-glow"></div>
+
+    <div class="glow-container">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div id="parallax-card">
+        <div class="container reveal">
+            <h1 class="reveal">Memoria</h1>
+            <div class="slogan reveal">
+                <span>TradingView is where you analyze the market.</span>
+                <span>The Broker is where you manage the trade.</span>
+                <strong class="gold-line gold-font-3">Memoria is where you analyze yourself.</strong>
+            </div>
+            
+            <div class="cta-container reveal">
+                <a href="https://github.com/Batu-end/Memoria/releases/latest" class="btn">Download for macOS</a>
+            </div>
+
+            <div class="footer reveal">
+                NATIVE SWIFTDATA ENGINE &bull; LOCAL-FIRST ALPHA
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('parallax-card');
+        const container = card.querySelector('.container');
+        const goldLine = document.querySelector('.gold-line');
+        const glow = document.getElementById('interactive-glow');
+
+        const EDGE_MARGIN_PX = 24; // keep in sync with body padding intent
+        const USER_SCALE = 0.9; // preferred size on roomy viewports
+        let fitScale = USER_SCALE;
+
+        function computeFitScale() {
+            // Temporarily remove transforms to measure "natural" size.
+            const prev = container.style.transform;
+            container.style.transform = 'none';
+            const rect = container.getBoundingClientRect();
+            container.style.transform = prev;
+
+            const availableW = Math.max(0, window.innerWidth - EDGE_MARGIN_PX * 2);
+            const availableH = Math.max(0, window.innerHeight - EDGE_MARGIN_PX * 2);
+
+            const scaleW = rect.width > 0 ? availableW / rect.width : 1;
+            const scaleH = rect.height > 0 ? availableH / rect.height : 1;
+            const auto = Math.min(scaleW, scaleH, 1);
+
+            // Don't over-shrink; keep it readable even on tiny viewports.
+            fitScale = Math.max(0.78, Math.min(USER_SCALE, auto));
+        }
+
+        computeFitScale();
+        window.addEventListener('resize', computeFitScale);
+
+        function setGoldPosFromLocalRatio(ratio) {
+            const clamped = Math.max(0, Math.min(1, ratio));
+            document.documentElement.style.setProperty('--gold-pos', `${clamped * 100}%`);
+        }
+
+        goldLine.addEventListener('mousemove', (e) => {
+            if (e.target !== goldLine) return;
+            setGoldPosFromLocalRatio(e.offsetX / goldLine.clientWidth);
+        });
+
+        goldLine.addEventListener('mouseleave', () => {
+            document.documentElement.style.setProperty('--gold-pos', '50%');
+        });
+
+        goldLine.addEventListener('touchmove', (e) => {
+            const t = e.touches && e.touches[0];
+            if (!t) return;
+            const rect = goldLine.getBoundingClientRect();
+            setGoldPosFromLocalRatio((t.clientX - rect.left) / rect.width);
+        }, { passive: true });
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // 1. Mouse Follow Glow
+            glow.style.left = x + 'px';
+            glow.style.top = y + 'px';
+
+            // 2. Subtle Parallax
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+
+            const rotateX = deltaY * -1.5;
+            const rotateY = deltaX * 1.5;
+            container.style.transform = `scale(${fitScale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+    </script>
+</body>
+</html>
