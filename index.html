@@ -156,12 +156,13 @@
         const goldLine = document.querySelector('.gold-line');
         const glow = document.getElementById('interactive-glow');
 
-        const EDGE_MARGIN_PX = 24; // keep in sync with body padding intent
-        const USER_SCALE = 0.9; // preferred size on roomy viewports
+        const EDGE_MARGIN_PX = 24;
+        const USER_SCALE = 0.9;
+        const isTouchDevice = window.matchMedia('(hover: none)').matches;
         let fitScale = USER_SCALE;
+        let resizeTimer;
 
         function computeFitScale() {
-            // Temporarily remove transforms to measure "natural" size.
             const prev = container.style.transform;
             container.style.transform = 'none';
             const rect = container.getBoundingClientRect();
@@ -174,12 +175,20 @@
             const scaleH = rect.height > 0 ? availableH / rect.height : 1;
             const auto = Math.min(scaleW, scaleH, 1);
 
-            // Don't over-shrink; keep it readable even on tiny viewports.
             fitScale = Math.max(0.78, Math.min(USER_SCALE, auto));
+
+            if (isTouchDevice) {
+                container.style.transform = `scale(${fitScale})`;
+            }
         }
 
         computeFitScale();
-        window.addEventListener('resize', computeFitScale);
+
+        // Debounce resize so mobile address-bar show/hide doesn't cause jitter
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(computeFitScale, 150);
+        });
 
         function setGoldPosFromLocalRatio(ratio) {
             const clamped = Math.max(0, Math.min(1, ratio));
@@ -202,8 +211,6 @@
             setGoldPosFromLocalRatio((t.clientX - rect.left) / rect.width);
         }, { passive: true });
 
-        const isTouchDevice = window.matchMedia('(hover: none)').matches;
-
         if (!isTouchDevice) {
             document.addEventListener('mousemove', (e) => {
                 const x = e.clientX;
@@ -222,12 +229,6 @@
                 const rotateX = deltaY * -1.5;
                 const rotateY = deltaX * 1.5;
                 container.style.transform = `scale(${fitScale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-        } else {
-            // On touch: just apply the fit scale, no rotation
-            container.style.transform = `scale(${fitScale})`;
-            window.addEventListener('resize', () => {
-                container.style.transform = `scale(${fitScale})`;
             });
         }
 
