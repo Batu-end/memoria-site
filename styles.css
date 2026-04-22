@@ -440,6 +440,10 @@ h1 {
 }
 
 @media (max-width: 768px) {
+    .container {
+        transition: none;
+        transform: none !important;
+    }
     .reveal {
         transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
