@@ -22,7 +22,8 @@ body {
     background-color: var(--bg);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
-    min-height: 100svh;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
@@ -31,7 +32,8 @@ body {
 }
 
 #hero {
-    min-height: 100svh;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;

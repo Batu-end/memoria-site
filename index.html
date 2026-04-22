@@ -163,6 +163,8 @@
         let resizeTimer;
 
         function computeFitScale() {
+            if (isTouchDevice) return; // CSS handles sizing on mobile, no JS needed
+
             const prev = container.style.transform;
             container.style.transform = 'none';
             const rect = container.getBoundingClientRect();
@@ -176,16 +178,12 @@
             const auto = Math.min(scaleW, scaleH, 1);
 
             fitScale = Math.max(0.78, Math.min(USER_SCALE, auto));
-
-            if (isTouchDevice) {
-                container.style.transform = `scale(${fitScale})`;
-            }
         }
 
         computeFitScale();
 
-        // Debounce resize so mobile address-bar show/hide doesn't cause jitter
         window.addEventListener('resize', () => {
+            if (isTouchDevice) return;
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(computeFitScale, 150);
         });
