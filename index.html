@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memoria | Find Your Alpha</title>
+    <title>Memoria | Discover Your Alpha</title>
 
     <!-- OpenGraph (Discord, iMessage, Slack, LinkedIn) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://batu-end.github.io/memoria-site/" />
-    <meta property="og:title" content="Memoria — Find Your Alpha" />
+    <meta property="og:title" content="Memoria — Discover Your Alpha" />
     <meta property="og:description"
         content="A native macOS trading journal for serious traders. Track your P&L, identify your edge, and understand why you win and lose." />
     <meta property="og:image" content="https://batu-end.github.io/memoria-site/assets/preview.png" />
@@ -18,7 +18,7 @@
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Memoria — Find Your Alpha" />
+    <meta name="twitter:title" content="Memoria — Discover Your Alpha" />
     <meta name="twitter:description"
         content="A native macOS trading journal for serious traders. Track your P&L, identify your edge, and understand why you win and lose." />
     <meta name="twitter:image" content="https://batu-end.github.io/memoria-site/assets/preview.png" />
@@ -139,7 +139,7 @@
     </section>
 
     <section id="download" class="download-section">
-        <h2 class="reveal">Ready to find your edge?</h2>
+        <h2 class="reveal">Ready to discover your edge?</h2>
         <p class="reveal">Free. Native. Yours.</p>
         <a href="https://github.com/Batu-end/Memoria/releases/latest" class="btn btn-large reveal">
             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 814 1000" fill="currentColor">
@@ -238,6 +238,15 @@
 
         document.querySelectorAll('.reveal').forEach(el => {
             observer.observe(el);
+        });
+
+        // Bento spotlight: track mouse per card
+        document.querySelectorAll('.bento-item').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+                card.style.setProperty('--my', `${e.clientY - r.top}px`);
+            });
         });
     </script>
 </body>
