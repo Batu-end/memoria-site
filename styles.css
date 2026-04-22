@@ -53,12 +53,14 @@ body::before {
 
 /* Animated Background Atmosphere */
 .glow-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
 }
 
 .glow {
@@ -475,13 +477,11 @@ h1 {
 .download-section {
     text-align: center;
     width: 100%;
-    height: 60svh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: clamp(3rem, 8vw, 6rem) 2rem;
 }
 
 .download-section h2 {
@@ -563,6 +563,7 @@ h1 {
     margin-bottom: clamp(2rem, 5vw, 4rem);
     letter-spacing: -0.02em;
     color: var(--text-primary);
+    text-align: center;
 }
 
 .manifesto-point {
@@ -654,8 +655,6 @@ h1 {
         grid-template-columns: 1fr;
     }
     .download-section {
-        height: auto;
-        min-height: 50svh;
         padding: 4rem 2rem;
     }
 }
@@ -691,6 +690,21 @@ h1 {
         font-size: 0.68rem;
         letter-spacing: 0.1em;
     }
+}
+
+/* ─── Background Grid ──────────────────────────────────── */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 72px 72px;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
 }
 
 /* ─── Bento Card Spotlight ─────────────────────────────── */
