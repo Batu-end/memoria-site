@@ -433,7 +433,14 @@ h1 {
 .reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+    .reveal {
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
 }
 
 .reveal.active {
