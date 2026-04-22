@@ -121,7 +121,7 @@
                     <ul class="roadmap-list">
                         <li><strong>The "Zen":</strong> Is the UI helping you focus?</li>
                         <li><strong>Local-First:</strong> How’s the SwiftData handling your history?</li>
-                        <li><strong>The Math:</strong> If a calc looks off, call it out.</li>
+                        <li><strong>The Math:</strong> If any number looks off, call it out.</li>
                     </ul>
                 </div>
 
@@ -202,24 +202,34 @@
             setGoldPosFromLocalRatio((t.clientX - rect.left) / rect.width);
         }, { passive: true });
 
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
+        const isTouchDevice = window.matchMedia('(hover: none)').matches;
 
-            // 1. Mouse Follow Glow
-            glow.style.left = x + 'px';
-            glow.style.top = y + 'px';
+        if (!isTouchDevice) {
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX;
+                const y = e.clientY;
 
-            // 2. Subtle Parallax
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const deltaX = (x - centerX) / centerX;
-            const deltaY = (y - centerY) / centerY;
+                // 1. Mouse Follow Glow
+                glow.style.left = x + 'px';
+                glow.style.top = y + 'px';
 
-            const rotateX = deltaY * -1.5;
-            const rotateY = deltaX * 1.5;
-            container.style.transform = `scale(${fitScale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
+                // 2. Subtle Parallax
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+
+                const rotateX = deltaY * -1.5;
+                const rotateY = deltaX * 1.5;
+                container.style.transform = `scale(${fitScale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+        } else {
+            // On touch: just apply the fit scale, no rotation
+            container.style.transform = `scale(${fitScale})`;
+            window.addEventListener('resize', () => {
+                container.style.transform = `scale(${fitScale})`;
+            });
+        }
 
         // Intersection Observer for Scroll Reveals
         const observerOptions = {
