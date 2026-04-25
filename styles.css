@@ -786,3 +786,23 @@ body::after {
 .gold-line {
     filter: drop-shadow(0 0 18px rgba(191,149,63,0.28));
 }
+
+/* ─── Site Footer ──────────────────────────────────────── */
+.site-footer {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2.5rem 2rem 3rem;
+}
+
+.site-footer a {
+    color: rgba(255, 255, 255, 0.2);
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.site-footer a:hover {
+    color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
