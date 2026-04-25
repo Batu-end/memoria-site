@@ -27,7 +27,6 @@ body {
     display: block;
     overflow-x: hidden;
     overflow-y: auto;
-    position: relative;
     scroll-behavior: smooth;
 }
 
